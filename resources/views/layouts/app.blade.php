@@ -74,9 +74,23 @@
             </div>
         </nav>
 
+        {{-- Flash Message --}}
+        @if($flash = session('message'))
+          <div id="flash-message" class="alert alert-success" role="alert" style="position: fixed; top: 3px; right:15px;">
+            {{ __($flash) }}
+          </div>
+          <script>
+            //removeFlashDiv();
+            setTimeout(function () {
+              document.getElementById('flash-message').setAttribute('style', "display:none");
+            }, 3500);
+          </script>
+        @endif
+
         <main class="py-4">
-            @yield('content')
+          @yield('content')
         </main>
+
     </div>
 </body>
 </html>
