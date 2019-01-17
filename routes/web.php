@@ -13,15 +13,19 @@
 
 Auth::routes();
 
-Route::get('/', function (){
-    return redirect('/posts');
+Route::redirect('/', '/posts');
+
+
+Route::name('post.')->group(function () {
+
+    Route::get('/posts', 'PostController@index')->name('index');
+    Route::get('/posts/by/{user}', 'PostController@index_author')->name('author');
+    Route::get('/posts/create', 'PostController@create')->name('create');
+    Route::post('/posts', 'PostController@store')->name('store');
+    Route::get('/posts/{post}/edit', 'PostController@edit')->name('edit');
+    Route::get('/posts/{post}', 'PostController@show')->name('show')/*->where('name', '[A-Za-z0-9-]+')*/;
+    Route::put('/posts/{post}', 'PostController@update')->name('update');
+//    Route::delete('/posts/{post}', 'PostController@destroy')->name('delete');
+
 });
 
-Route::get('/posts/create', 'PostController@create')->name('post.create');
-Route::get('/posts/by/{user}', 'PostController@index')->name('post.user');
-Route::post('/posts', 'PostController@store')->name('post.store');
-Route::get('/posts', 'PostController@index')->name('post.index');
-Route::get('/posts/{post}/edit', 'PostController@edit')->name('post.edit');
-Route::get('/posts/{post}', 'PostController@show')->name('post.show');
-Route::put('/posts/{post}', 'PostController@update')->name('post.update');
-Route::delete('/posts/{post}', 'PostController@destroy')->name('post.delete');

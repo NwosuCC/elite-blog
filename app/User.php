@@ -27,4 +27,20 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+
+    public function getRouteKeyName() {
+        return 'name';
+    }
+
+
+    public function posts() {
+        return $this->hasMany(Post::class)->latest();
+    }
+
+
+    public function publishPost(Post $post){
+        $this->posts()->save($post);
+    }
+
 }

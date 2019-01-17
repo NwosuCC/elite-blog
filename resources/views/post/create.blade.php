@@ -15,8 +15,9 @@
                   <a class="nav-link p-0" href="{{ route('post.index') }}">{{ __('Home') }}</a>
                 </small>
                 <small class="d-inline-block pl-2 border-left">
-                  {{-- ToDo: create helper function for AuthUser name : strtolower(auth()->user()->name)]) --}}
-                  <a class="nav-link p-0" href="{{ route('post.user', ['user' => strtolower(auth()->user()->name)]) }}">{{ __('My Articles') }}</a>
+                  <a class="nav-link p-0" href="{{ route('post.author', ['user' => user_slug()]) }}">
+                    {{ __('My Articles') }}
+                  </a>
                 </small>
               </div>
             </div>

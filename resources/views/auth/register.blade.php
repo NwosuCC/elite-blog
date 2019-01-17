@@ -43,7 +43,13 @@
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
+                                {{-- ToDo: add 'show/hide password' toggle --}}
+                                <div class="input-group">
+                                  <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
+                                  <div class="input-group input-group-append">
+                                    {{--<i class="">+</i>--}}
+                                  </div>
+                                </div>
 
                                 @if ($errors->has('password'))
                                     <span class="invalid-feedback" role="alert">

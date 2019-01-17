@@ -5,10 +5,26 @@
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card">
-          <div class="card-header">{{ __('Edit Post') }}</div>
+          <div class="card-header">
+            <div class="row no-gutters pt-1">
+              <div class="">
+                <h5>{{ __('Edit Article')  }}</h5>
+              </div>
+              <div class="ml-auto">
+                <small class="d-inline-block px-2">
+                  <a class="nav-link p-0" href="{{ route('post.index') }}">{{ __('Home') }}</a>
+                </small>
+                <small class="d-inline-block pl-2 border-left">
+                  <a class="nav-link p-0" href="{{ route('post.author', ['user' => user_slug()]) }}">
+                    {{ __('My Articles') }}
+                  </a>
+                </small>
+              </div>
+            </div>
+          </div>
 
           <div class="card-body">
-            <form method="POST" action="{{ route('post.update', ['post' => $post->id]) }}">
+            <form method="POST" action="{{ route('post.update', ['post' => $post]) }}">
               @csrf
               <input type="hidden" name="_method" value="PUT">
 

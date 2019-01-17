@@ -11,8 +11,16 @@
                       <h2>{{ __('Articles')  }}</h2>
                     </div>
                     <div class="ml-auto">
-                      <small>
-                        <a class="nav-link p-0" href="{{ route('post.create') }}">{{ __('Publish an Article') }}</a>
+                      <small class="d-inline-block px-2">
+                        <a class="nav-link p-0" href="{{ route('post.index') }}">
+                          {{ __('Home') }}
+                        </a>
+                      </small>
+
+                      <small class="d-inline-block pl-2 border-left">
+                        <a class="nav-link p-0" href="{{ route('post.create') }}">
+                          {{ __('Publish an Article') }}
+                        </a>
                       </small>
                     </div>
                   </div>
@@ -29,6 +37,9 @@
                       @foreach($posts as $post)
                       <div class="col-4">
                         <h5 class="font-weight-bold">
+                          {{--<a class="nav-link p-0" href="{{ route('post.show', ['post' => $post->id]) }}">
+                            {{ __($post->title) }}
+                          </a>--}}
                           {{ __($post->title) }}
                         </h5>
                         <div style="height: 70px; overflow: hidden;">
