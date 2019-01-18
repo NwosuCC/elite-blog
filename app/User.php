@@ -29,8 +29,29 @@ class User extends Authenticatable
     ];
 
 
+    public function isAdmin() {
+        return $this->getAttribute('role') === 'admin';
+    }
+
     public function getRouteKeyName() {
         return 'name';
+    }
+
+//    public function getNameAttribute() {
+//        return str_slug( $this->getAttribute('name') );
+//    }
+
+    public function getSlugAttribute() {
+        return str_slug( $this->getAttribute('name') );
+    }
+
+
+    public function categories() {
+        return $this->hasMany(Category::class)->latest();
+    }
+
+    public function createCategory(Category $category) {
+        $this->categories()->save($category);
     }
 
 
@@ -38,9 +59,8 @@ class User extends Authenticatable
         return $this->hasMany(Post::class)->latest();
     }
 
-
-    public function publishPost(Post $post){
-        $this->posts()->save($post);
+    public function publishPost(Category $category, Post $post){
+        $this->posts()->save( $category->addPost($post) );
     }
 
 }

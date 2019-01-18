@@ -36,14 +36,14 @@
                 <label for="category" class="col-md-4 col-form-label text-md-right">{{ __('Category') }}</label>
 
                 <div class="col-md-6">
-                  <select id="category" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" name="category" required autofocus>
+                  <select id="title" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" name="title" required autofocus>
                     <option value="">- select -</option>
                     @foreach($categories as $category)
                       <option value="{{ $category->id }}">{{ $category->name }}</option>
                     @endforeach
                   </select>
 
-                  @if ($errors->has('category'))
+                  @if ($errors->has('title'))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first('title') }}</strong>
                     </span>
@@ -113,10 +113,9 @@
             </button>
           </div>
 
-          <form method="POST" action="{{ route('category.store') }}">
-            @csrf
-
-            <div class="modal-body">
+          <div class="modal-body">
+            <form method="POST" action="{{ route('category.store') }}">
+              @csrf
 
               <div class="py-0 px-5">
                 <div class="form-group row">
@@ -130,19 +129,17 @@
                 </div>
               </div>
 
-            </div>
+            </form>
+          </div>
 
-            <div class="modal-footer">
-              <button type="button" class="btn btn-metal" data-dismiss="modal">
-                Close
-              </button>
-              <button type="submit" class="btn btn-primary">
-                Create Category
-              </button>
-            </div>
-
-          </form>
-
+          <div class="modal-footer">
+            <button type="button" class="btn btn-metal" data-dismiss="modal">
+              Close
+            </button>
+            <button type="button" class="btn btn-primary">
+              Create Category
+            </button>
+          </div>
         </div>
       </div>
     </div>

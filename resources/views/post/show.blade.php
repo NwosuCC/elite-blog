@@ -35,7 +35,7 @@
             <small class="row no-gutters">
               <span class="mr-4">
                 <b>Author</b>:
-                <a class="nav-link d-inline-block p-0" href="{{ route('post.author', ['user' => user_slug($post->user->name)]) }}">
+                <a class="nav-link d-inline-block p-0" href="{{ route('post.author', ['user' => $post->user->slug]) }}">
                   {{ __($post->user->name) }}
                 </a>
 
@@ -43,6 +43,12 @@
               <span class="mr-4">
                 <b>Published</b>:
                 {{ __($post->created_at->diffForHumans()) }}
+              </span>
+              <span class="mr-4">
+                <b>Category</b>:
+                <a class="nav-link d-inline-block p-0" href="{{ route('post.category', ['category' => str_slug($post->category->name)]) }}">
+                  {{ __($post->category->name) }}
+                </a>
               </span>
             </small>
 

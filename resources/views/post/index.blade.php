@@ -19,19 +19,13 @@
                 </div>
 
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
                     <div class="row p-4">
                       @foreach($posts as $post)
-                      <div class="col-4">
+                      <div class="col-12 col-lg-6">
                         <h5 class="font-weight-bold">
                           {{ __($post->title) }}
                         </h5>
-                        <div style="height: 70px; overflow: hidden;">
+                        <div class="mb-4 mb-md-0" style="height: 70px; overflow: hidden;">
                           <p>
                             <span>
                               {{ __( str_words($post->body, 22) ) }}
