@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'slug'
     ];
 
     /**
@@ -29,20 +29,13 @@ class User extends Authenticatable
     ];
 
 
+    public function getRouteKeyName() {
+        return 'slug';
+    }
+
+
     public function isAdmin() {
         return $this->getAttribute('role') === 'admin';
-    }
-
-    public function getRouteKeyName() {
-        return 'name';
-    }
-
-//    public function getNameAttribute() {
-//        return str_slug( $this->getAttribute('name') );
-//    }
-
-    public function getSlugAttribute() {
-        return str_slug( $this->getAttribute('name') );
     }
 
 

@@ -40,6 +40,11 @@
                         </div>
                       </div>
                       @endforeach
+                      @if(!count($posts))
+                        <div class="col-12 text-center">
+                          There are no published articles
+                        </div>
+                      @endif
                     </div>
                 </div>
             </div>

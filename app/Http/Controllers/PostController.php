@@ -30,12 +30,10 @@ class PostController extends Controller
 
     public function index(User $user = null, Category $category = null)
     {
-        $user = null;
-        $category = null;
-//        dd($user);
         switch (true) {
             case ($user and $category) : {
-                $posts = $user->posts()->belongsTo($category);  break;
+                $posts = $user->posts()->inCategory($category);
+                break;
             }
             case ($user) : {
                 $posts = $user->posts();  break;
@@ -97,6 +95,7 @@ class PostController extends Controller
 
 
     public function show(Post $post) {
+
 //        dd( is_a($post, Post::class));  // true
 //        dd( is_subclass_of($post, Model::class));  // true
 //        dd( is_subclass_of(Post::class, Model::class));  // true
@@ -145,11 +144,18 @@ class PostController extends Controller
 
 
     public function destroy(Post $post) {
-        // ToDo: add 'deleted' column to migration
         // ToDo: add 'delete' action button in post.index-author view
-        $post->update([ 'deleted' => 1 ]);
 
-        auth()->user()->posts()->save($post);
+        if( ! $post->author() ) {
+            session()->flash('message', Post::error(Post::ERROR_NO_MODIFY, Post::class));
+
+            return redirect()->back();
+        }
+
+//        auth()->user()->posts()->destroy($post);
+        $post->delete();
+
+//        dd( Post::onlyTrashed()->restore() );
 
         session()->flash('message', "Article deleted");
 

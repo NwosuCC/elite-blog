@@ -9,6 +9,11 @@ class Category extends Model
     ];
 
 
+    public function getRouteKeyName() {
+        return 'slug';
+    }
+
+
     public function posts() {
         return $this->hasMany(Post::class)->latest();
     }
@@ -16,11 +21,6 @@ class Category extends Model
     public function addPost(Post $post) {
         $post->setAttribute('category_id', $this->getAttribute('id'));
         return $post;
-    }
-
-
-    public function getRouteKeyName() {
-        return 'slug';
     }
 
 

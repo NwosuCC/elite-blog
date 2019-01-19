@@ -2,8 +2,6 @@
 
 namespace App;
 
-use ErrorException;
-use Exception;
 
 class Post extends Model
 {
@@ -24,6 +22,10 @@ class Post extends Model
 
     public function category() {
         return $this->belongsTo(Category::class);
+    }
+
+    public function scopeInCategory($query, $category){
+        return $query->where('category_id', $category->id);
     }
 
 

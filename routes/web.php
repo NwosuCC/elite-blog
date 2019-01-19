@@ -11,9 +11,9 @@
 |
 */
 
-Auth::routes();
-
 Route::redirect('/', '/posts');
+
+Auth::routes();
 
 
 Route::name('category.')->group(function () {
