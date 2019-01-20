@@ -19,6 +19,51 @@
                 </div>
 
                 <div class="card-body">
+                    <div class="row px-4">
+                        <div class="col-12">
+                            <span class="pr-3">Filter posts by:</span>
+                            <span class="pr-1 font-weight-bold">Category</span>
+                            <div class="d-inline-block">
+                                <select id="category" onchange="goTo(this.value);" class="form-control-sm" name="category" style="font-size: 14px;" required title="">
+                                    <option value=""> All Categories </option>
+                                    @foreach($categories as $cat)
+                                        <option value="{{ $cat->slug }}" {{$category && $category->slug === $cat->slug ? 'selected' : ''}}>
+                                            {{ $cat->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <script>
+                                    const goTo = function(category){
+                                        let href = '', author = '{{ $user ? $user->slug : '' }}';
+
+                                        switch (true) {
+                                            case !!(author && category) : {
+                                                href = '{{route('post.author.category',['user'=>'', 'category'=>''])}}/' + category;
+                                                href = href.replace('by/', 'by/' + author);
+                                                break;
+                                            }
+                                            case !!(author) : {
+                                                href = '{{route('post.author',['user'=>''])}}/' + author;
+                                                break;
+                                            }
+                                            case !!(category) : {
+                                                href = '{{route('post.category',['category'=>''])}}/' + category;
+                                                break;
+                                            }
+                                            default : {
+                                                href = '{{route('post.index')}}/';
+                                            }
+                                        }
+
+                                        window.location.href = href;
+                                    }
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
                     <div class="row p-4">
                       @foreach($posts as $post)
                       <div class="col-12 col-lg-6">
@@ -52,3 +97,4 @@
     </div>
 </div>
 @endsection
+

@@ -21,13 +21,6 @@ class CategoryController extends Controller
         return view('category.index', compact('categories'));
     }
 
-
-    public function create()
-    {
-        return view('category.create');
-    }
-
-
     public function store(Request $request)
     {
         if( ! auth()->user()->isAdmin() ) {
@@ -45,25 +38,12 @@ class CategoryController extends Controller
         $data = $request->only(['name', 'description']);
         $data['slug'] = str_slug( $data['name'] );
 
-        auth()->user()->createCategory( new Category($data) );
+        $aa = auth()->user()->createCategory( new Category($data) );
 
         session()->flash('message', "New category saved");
 
         return redirect()->route('category.index');
     }
-
-
-    public function show(Category $category)
-    {
-        //
-    }
-
-
-    public function edit(Category $category)
-    {
-        //
-    }
-
 
     public function update(Request $request, Category $category)
     {

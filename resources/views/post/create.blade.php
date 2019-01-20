@@ -36,10 +36,10 @@
                 <label for="category" class="col-md-4 col-form-label text-md-right">{{ __('Category') }}</label>
 
                 <div class="col-md-6">
-                  <select id="category" class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}" name="category" required autofocus>
+                  <select id="category" class="form-control{{ $errors->has('category') ? ' is-invalid' : '' }}" name="category" required autofocus>
                     <option value="">- select -</option>
                     @foreach($categories as $category)
-                      <option value="{{ $category->id }}">{{ $category->name }}</option>
+                      <option value="{{ $category->id }}" {{ (int)old('category') === (int)$category->id ? 'selected' : ''}}>{{ $category->name }}</option>
                     @endforeach
                   </select>
 
@@ -49,13 +49,6 @@
                     </span>
                   @endif
                 </div>
-
-                <div class="col-1">
-                  <a href="#" data-toggle="modal" data-target="#addCategoryModal" class="btn btn-light">
-                    <i class="fa fa-plus"></i> New..
-                  </a>
-                </div>
-
               </div>
 
               <div class="form-group row">
@@ -95,54 +88,6 @@
               </div>
             </form>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header" style="background-color: #f7f8fa;border-color: #f7f8fa">
-            <h5 class="modal-title" style="color: #123466" id="exampleModalLabel">
-              Add A Category
-            </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">
-                  &times;
-              </span>
-            </button>
-          </div>
-
-          <form method="POST" action="{{ route('category.store') }}">
-            @csrf
-
-            <div class="modal-body">
-
-              <div class="py-0 px-5">
-                <div class="form-group row">
-                  <label for="name">{{ __('Name') }}</label>
-                  <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
-                </div>
-
-                <div class="form-group row">
-                  <label for="description">{{ __('Description') }}</label>
-                  <textarea id="description" class="form-control" name="description" required>{{ old('description') }}</textarea>
-                </div>
-              </div>
-
-            </div>
-
-            <div class="modal-footer">
-              <button type="button" class="btn btn-metal" data-dismiss="modal">
-                Close
-              </button>
-              <button type="submit" class="btn btn-primary">
-                Create Category
-              </button>
-            </div>
-
-          </form>
-
         </div>
       </div>
     </div>

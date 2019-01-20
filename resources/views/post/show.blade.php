@@ -20,9 +20,15 @@
                   </a>
                 </small>
 
+                <small class="d-inline-block px-2 border-left">
+                  <a class="nav-link d-inline-block p-0" href="{{ url()->previous() }}">
+                    {{ __('Back') }}
+                  </a>
+                </small>
+
                 @if( auth()->id() === $post->user_id )
                   <small class="d-inline-block pl-2 border-left">
-                    <a class="nav-link d-inline-block p-0" href="{{ route('post.edit', ['post' => $post]) }}">
+                    <a class="nav-link d-inline-block p-0" href="{{ route('post.edit', [$post]) }}">
                       {{ __('Edit Article') }}
                     </a>
                   </small>
@@ -35,7 +41,7 @@
             <small class="row no-gutters">
               <span class="mr-4">
                 <b>Author</b>:
-                <a class="nav-link d-inline-block p-0" href="{{ route('post.author', ['user' => $post->user->slug]) }}">
+                <a class="nav-link d-inline-block p-0" href="{{ route('post.author', [$post->user]) }}">
                   {{ __($post->user->name) }}
                 </a>
 

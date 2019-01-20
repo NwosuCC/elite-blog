@@ -45,9 +45,10 @@ class PostController extends Controller
         }
 
         $posts = $posts->get();
-//        dd($posts);
 
-        return view('post.index', compact('posts'));
+        $categories = Category::latest()->get();
+
+        return view('post.index', compact('posts', 'categories', 'user', 'category'));
     }
 
 
@@ -127,15 +128,20 @@ class PostController extends Controller
         }
 
         $this->validate(request(), [
-            'title' => 'required|unique:posts|min:3|max:30',
-            'body'  => 'required'
+            'category' => 'required',
+            'title' => 'required|min:3|max:30',
+            'body'  => 'required',
         ]);
 
-        $post->update([
+        $category = Category::find($request->input('category'));
+
+        $post->fill([
             'title' => $request->input('title'),
             'body' => $request->input('body'),
             'slug' => str_slug( $request->input('title') ),
         ]);
+
+        auth()->user()->publishPost( $category, $post );
 
         session()->flash('message', "Article updated");
 

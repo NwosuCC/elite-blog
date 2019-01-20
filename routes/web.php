@@ -11,6 +11,7 @@
 |
 */
 
+Route::redirect('/home', '/posts');
 Route::redirect('/', '/posts');
 
 Auth::routes();
@@ -19,10 +20,10 @@ Auth::routes();
 Route::name('category.')->group(function () {
 
     Route::get('/categories', 'CategoryController@index')->name('index');
-    Route::get('/categories/create', 'CategoryController@create')->name('create');
+//    Route::get('/categories/create', 'CategoryController@create')->name('create');
     Route::post('/categories', 'CategoryController@store')->name('store');
-    Route::get('/categories/{category}/edit', 'CategoryController@edit')->name('edit');
-    Route::get('/categories/{category}', 'CategoryController@show')->name('show')->where('name', '[A-Za-z0-9 ]+');
+//    Route::get('/categories/{category}/edit', 'CategoryController@edit')->name('edit');
+//    Route::get('/categories/{category}', 'CategoryController@show')->name('show')->where('name', '[A-Za-z0-9 ]+');
     Route::put('/categories/{category}', 'CategoryController@update')->name('update');
 
 });
