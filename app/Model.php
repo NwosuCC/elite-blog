@@ -19,6 +19,11 @@ class Model extends Eloquent
     protected $dates = ['deleted_at'];
 
 
+    public function getFormValuesAttribute() {
+        return json_encode( $this->only($this->fillable) );
+    }
+
+
     protected static $errors = [
         'no_action' => 'You are not authorized to perform this action',
         'no_modify' => 'You do not have permission to modify this {model}',

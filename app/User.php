@@ -28,6 +28,8 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    const ADMIN_ROLE = 'admin';
+
 
     public function getRouteKeyName() {
         return 'slug';
@@ -35,7 +37,7 @@ class User extends Authenticatable
 
 
     public function isAdmin() {
-        return $this->getAttribute('role') === 'admin';
+        return $this->getAttribute('role') === static::ADMIN_ROLE;
     }
 
 

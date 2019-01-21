@@ -32,8 +32,9 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                {{-- Script function goto() --}}
                                 <script>
-                                    const goTo = function(category){
+                                    const goTo = (category) => {
                                         let href = '', author = '{{ $user ? $user->slug : '' }}';
 
                                         switch (true) {
@@ -87,7 +88,7 @@
                       @endforeach
                       @if(!count($posts))
                         <div class="col-12 text-center">
-                          There are no published articles
+                          There are no published articles here
                         </div>
                       @endif
                     </div>

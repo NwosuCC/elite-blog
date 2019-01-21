@@ -96,4 +96,10 @@
 
     </div>
 </body>
+<script>
+    /* Global helper functions */
+    const parseToJSON = (stringObject) => {
+        try{ return JSON.parse(stringObject); } catch (error){ console.log(error); }
+    };
+</script>
 </html>

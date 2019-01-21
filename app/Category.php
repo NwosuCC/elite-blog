@@ -14,6 +14,11 @@ class Category extends Model
     }
 
 
+
+    public function isActive(){
+        return ! $this->getDeletedAtColumn();
+    }
+
     public function posts() {
         return $this->hasMany(Post::class)->latest();
     }

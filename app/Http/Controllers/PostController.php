@@ -44,7 +44,11 @@ class PostController extends Controller
             default : { $posts = Post::latest(); }
         }
 
-        $posts = $posts->get();
+        // ToDo: cascade delete Category to affect all sub-Posts (See CategoryController@destroy)
+        // ToDo: filter out Posts with inactive/deleted Category
+        $posts = $posts->get()->reject(function ($post){
+            return  ! $post->category()->first();
+        });
 
         $categories = Category::latest()->get();
 

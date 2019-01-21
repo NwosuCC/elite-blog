@@ -20,17 +20,11 @@ Auth::routes();
 Route::name('category.')->group(function () {
 
     Route::get('/categories', 'CategoryController@index')->name('index');
-//    Route::get('/categories/create', 'CategoryController@create')->name('create');
     Route::post('/categories', 'CategoryController@store')->name('store');
-//    Route::get('/categories/{category}/edit', 'CategoryController@edit')->name('edit');
-//    Route::get('/categories/{category}', 'CategoryController@show')->name('show')->where('name', '[A-Za-z0-9 ]+');
     Route::put('/categories/{category}', 'CategoryController@update')->name('update');
+    Route::delete('/categories/{category}', 'CategoryController@destroy')->name('delete');
 
 });
-
-
-//    Route::get('/category/{category}/posts', 'PostController@index')->name('category');
-//    Route::get('/author/{user}/posts', 'PostController@index')->name('author');
 
 
 Route::name('post.')->group(function () {
