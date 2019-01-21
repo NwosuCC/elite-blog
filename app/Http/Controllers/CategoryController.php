@@ -10,7 +10,7 @@ class CategoryController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth', 'admin']);
     }
 
 
@@ -23,13 +23,6 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        if( ! auth()->user()->isAdmin() ) {
-
-            session()->flash('message', Category::error(Category::ERROR_NO_ACTION));
-
-            return redirect()->back();
-        }
-
         $this->validate(request(), [
             'name' => 'required|unique:categories|min:3|max:30',
             'description'  => 'required'
@@ -47,20 +40,12 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
-        // ToDO: Update a Category? How about the Bookmarks using the former slug?? Any backwards compatibility???
-
-        if( ! auth()->user()->isAdmin() ) {
-
-            session()->flash('message', Category::error(Category::ERROR_NO_MODIFY));
-
-            return redirect()->back();
-        }
-
         $this->validate(request(), [
             'name' => 'required|min:3|max:30',
             'description'  => 'required'
         ]);
 
+        // ToDO: Update a Category? How about the Bookmarks using the former slug?? Any backwards compatibility???
         $category->update([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
