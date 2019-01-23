@@ -14,7 +14,18 @@
 Route::redirect('/home', '/posts');
 Route::redirect('/', '/posts');
 
+
 Auth::routes();
+
+
+Route::name('role.')->group(function () {
+
+    Route::get('/roles', 'RoleController@index')->name('index');
+    Route::post('/roles', 'RoleController@store')->name('store');
+    Route::put('/roles/{role}', 'RoleController@update')->name('update');
+    Route::delete('/roles/{role}', 'RoleController@destroy')->name('delete');
+
+});
 
 
 Route::name('category.')->group(function () {

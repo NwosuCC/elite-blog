@@ -28,16 +28,25 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    const ADMIN_ROLE = 'admin';
-
 
     public function getRouteKeyName() {
         return 'slug';
     }
 
+    public function roles() {
+        return $this->belongsToMany(Role::class)->withTimestamps();
+    }
+
+    public function createRole(Role $role) {
+        $this->roles()->save($role);
+    }
+
+    public function hasRole($role) {
+        return $this->roles()->where('slug', $role)->exists();
+    }
 
     public function isAdmin() {
-        return $this->getAttribute('role') === static::ADMIN_ROLE;
+        return $this->hasRole(Role::ADMIN_ROLE);
     }
 
 
