@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
+use App\Http\Requests\PostRequest;
 use App\User;
+use App\Category;
 use App\Post;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 class PostController extends Controller
@@ -34,11 +37,10 @@ class PostController extends Controller
     {
         switch (true) {
             case ($user and $category) : {
-                $posts = $user->posts()->inCategory($category);
-                break;
+                $posts = $user->posts()->filter($category); break;
             }
             case ($user) : {
-                $posts = $user->posts();  break;
+                $posts = $user->posts(); break;
             }
             case ($category) : {
                 $posts = $category->posts(); break;
@@ -46,11 +48,7 @@ class PostController extends Controller
             default : { $posts = Post::latest(); }
         }
 
-        // ToDo: cascade delete Category to affect all sub-Posts (See CategoryController@destroy)
-        // ToDo: filter out Posts with inactive/deleted Category
-        $posts = $posts->get()->reject(function ($post){
-            return  ! $post->category()->first();
-        });
+        $posts = $posts->filter()->published()->get();
 
         $categories = Category::latest()->get();
 
@@ -77,35 +75,28 @@ class PostController extends Controller
     }
 
 
-    public function store(Request $request) {
-        $this->validate(request(), [
-            'category' => 'required',
-            'title' => 'required|unique:posts|min:3|max:30',
-            'body'  => 'required'
+    public function store(PostRequest $request) {
+        $category = Category::find( $request->input(['category']) );
+
+        $post = (new Post())->fill([
+            'title' => $request->input('title'),
+            'body' => $request->input('body'),
+            'slug' => str_slug( $request->input('title') ),
+            'published_at' => $request->input('publish_at') ?: Carbon::now(),
         ]);
 
-        if($category = Category::find($request->input('category')) ) {
-            $data = $request->only(['title', 'body']);
-            $data['slug'] = str_slug( $data['title'] );
+        auth()->user()->publishPost( $category, $post );
 
-            auth()->user()->publishPost( $category, new Post($data) );
+        session()->flash('message', "New article saved");
 
-            session()->flash('message', "New article saved");
-
-            return redirect()->route('post.index');
-        }
-
-        session()->flash('message', "Article not created!");
-
-        return redirect()->back();
+        return redirect()->route('post.index');
     }
 
 
     public function show(Post $post) {
-
-//        dd( is_a($post, Post::class));  // true
-//        dd( is_subclass_of($post, Model::class));  // true
-//        dd( is_subclass_of(Post::class, Model::class));  // true
+        if( ! $post->published() ) {
+            throw new NotFoundHttpException();
+        }
 
         return view('post.show', compact('post'));
     }
@@ -114,8 +105,6 @@ class PostController extends Controller
     public function edit(Post $post) {
         // ToDo: use Gates or Authorize to implement this check
         if( ! $post->author() ) {
-            session()->flash('message', Post::error(Post::ERROR_NO_MODIFY, Post::class));
-
             return redirect()->back();
         }
 
@@ -125,19 +114,8 @@ class PostController extends Controller
     }
 
 
-    public function update(Request $request, Post $post) {
-        // ToDo: use Gates or Authorize to implement this check
-        if( ! $post->author() ) {
-            session()->flash('message', Post::error(Post::ERROR_NO_MODIFY, Post::class));
-
-            return redirect()->back();
-        }
-
-        $this->validate(request(), [
-            'category' => 'required',
-            'title' => 'required|min:3|max:30',
-            'body'  => 'required',
-        ]);
+    public function update(PostRequest $request, Post $post) {
+        // ToDo: use Gates (instead of Authorize) to implement this check
 
         $category = Category::find($request->input('category'));
 
@@ -155,16 +133,9 @@ class PostController extends Controller
     }
 
 
-    public function destroy(Post $post) {
+    public function destroy(PostRequest $request, Post $post) {
         // ToDo: add 'delete' action button in post.index-author view
 
-        if( ! $post->author() ) {
-            session()->flash('message', Post::error(Post::ERROR_NO_MODIFY, Post::class));
-
-            return redirect()->back();
-        }
-
-//        auth()->user()->posts()->destroy($post);
         $post->delete();
 
 //        dd( Post::onlyTrashed()->restore() );

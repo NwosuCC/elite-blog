@@ -35,13 +35,13 @@
                   <select id="category" class="form-control{{ $errors->has('category') ? ' is-invalid' : '' }}" name="category" required autofocus>
                     <option value="">- select -</option>
                     @foreach($categories as $category)
-                      <option value="{{ $category->id }}" {{ (old('category') ?: __($post->category->id)) === $category->id ? 'selected' : ''}}>{{ $category->name }}</option>
+                      <option value="{{ $category->id }}" {{ (int)(old('category') ?: $post->category->id) === (int)$category->id ? 'selected' : ''}}>{{ $category->name }}</option>
                     @endforeach
                   </select>
 
                   @if ($errors->has('category'))
                     <span class="invalid-feedback" role="alert">
-                        <strong>{{ $errors->first('title') }}</strong>
+                        <strong>{{ $errors->first('category') }}</strong>
                     </span>
                   @endif
                 </div>

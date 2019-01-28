@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+        MarkTopper\DoctrineDBALTimestampType\Laravel5ServiceProvider::class,
 
         /*
          * Application Service Providers...

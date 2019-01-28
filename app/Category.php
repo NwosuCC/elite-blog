@@ -14,10 +14,15 @@ class Category extends Model
     }
 
 
-
-    public function isActive(){
-        return ! $this->getDeletedAtColumn();
+    public function user() {
+        return $this->belongsTo(User::class);
     }
+
+
+    /*public static function scopeActive($query){
+        return $query->whereNull( (new static)->getDeletedAtColumn().'s' );
+    }*/
+
 
     public function posts() {
         return $this->hasMany(Post::class)->latest();

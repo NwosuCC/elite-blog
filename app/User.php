@@ -50,21 +50,21 @@ class User extends Authenticatable
     }
 
 
-    public function categories() {
-        return $this->hasMany(Category::class)->latest();
-    }
-
     public function createCategory(Category $category) {
         $this->categories()->save($category);
     }
 
-
-    public function posts() {
-        return $this->hasMany(Post::class)->latest();
+    public function categories() {
+        return $this->hasMany(Category::class)->latest();
     }
+
 
     public function publishPost(Category $category, Post $post){
         $this->posts()->save( $category->addPost($post) );
+    }
+
+    public function posts() {
+        return $this->hasMany(Post::class)->latest();
     }
 
 }

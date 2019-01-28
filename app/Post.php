@@ -3,10 +3,12 @@
 namespace App;
 
 
+use Carbon\Carbon;
+
 class Post extends Model
 {
     protected $fillable = [
-        'title', 'body', 'slug'
+        'title', 'body', 'slug', 'published_at'
     ];
 
 
@@ -24,8 +26,22 @@ class Post extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function scopeInCategory($query, $category){
-        return $query->where('category_id', $category->id);
+
+    public function scopeFilter($query, $category = null){
+        $categoryGroup = $category
+            ? array_values( $category->only('id') )
+            : Category::all()->pluck('id');
+
+        return $query->whereIn('category_id', $categoryGroup);
+    }
+
+
+    public function scopePublished($query){
+        if($published_at = $this->getAttribute('published_at')) {
+            return Carbon::make( $published_at )->isPast();
+        }
+
+        return $query->where('published_at', '<=', Carbon::now());
     }
 
 

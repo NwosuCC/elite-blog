@@ -45,7 +45,7 @@
 
                   @if ($errors->has('category'))
                     <span class="invalid-feedback" role="alert">
-                        <strong>{{ $errors->first('title') }}</strong>
+                        <strong>{{ $errors->first('category') }}</strong>
                     </span>
                   @endif
                 </div>
@@ -74,6 +74,20 @@
                   @if ($errors->has('body'))
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $errors->first('body') }}</strong>
+                    </span>
+                  @endif
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="publish_at" class="col-md-4 col-form-label text-md-right">{{ __('Publish Date') }}</label>
+
+                <div class="col-md-6">
+                  <input id="publish_at" type="datetime-local" class="form-control{{ $errors->has('publish_at') ? ' is-invalid' : '' }}" name="publish_at" value="{{ old('publish_at') }}">
+
+                  @if ($errors->has('publish_at'))
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $errors->first('publish_at') }}</strong>
                     </span>
                   @endif
                 </div>
