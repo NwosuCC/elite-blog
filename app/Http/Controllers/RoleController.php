@@ -33,7 +33,7 @@ class RoleController extends Controller
 
         auth()->user()->createRole( new Role($data) );
 
-        session()->flash('message', "New role created");
+        set_flash("New role created");
 
         return redirect()->route('role.index');
     }
@@ -52,7 +52,7 @@ class RoleController extends Controller
             'slug' => str_slug( $request->input('name') ),
         ]);
 
-        session()->flash('message', "Role updated");
+        set_flash("Role updated");
 
         return redirect()->route('role.index');
     }
@@ -61,7 +61,7 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         if( $role->isDefault ){
-            session()->flash('message', 'Default roles cannot be modified');
+            set_flash('Default roles cannot be modified', 'info');
 
             return redirect()->back();
         }
@@ -69,7 +69,7 @@ class RoleController extends Controller
         // ToDO: Delete a CUSTOM Role? What happens to the Holders??
         $role->delete();
 
-        session()->flash('message', "Role deleted");
+        set_flash("Role deleted");
 
         return redirect()->route('role.index');
     }

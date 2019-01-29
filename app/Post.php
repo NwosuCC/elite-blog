@@ -46,7 +46,7 @@ class Post extends Model
 
 
     public function author() {
-        return auth()->user()->posts()->find($this->only('id'))->first();
+        return auth()->id() === $this->id;
     }
 
 }

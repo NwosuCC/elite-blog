@@ -78,9 +78,9 @@
         </nav>
 
         {{-- Flash Message --}}
-        @if($flash = session('message'))
-          <div id="flash-message" class="alert alert-success" role="alert" style="position: fixed; top: 3px; right:15px;">
-            {{ __($flash) }}
+        @if($flash = get_flash())
+          <div id="flash-message" class="alert alert-{{$flash['type']?:'success'}}" role="alert" style="position: fixed; top: 3px; right:15px; min-width: 300px; border-radius: 1px;">
+            {{ __($flash['message']) }}
           </div>
           <script>
             //removeFlashDiv();

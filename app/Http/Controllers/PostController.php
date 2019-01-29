@@ -8,9 +8,6 @@ use App\Category;
 use App\Post;
 
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 class PostController extends Controller
@@ -22,15 +19,6 @@ class PostController extends Controller
             'index', 'index_author', 'index_category', 'show'
         ]);
     }
-
-//    protected function validator(array $data)
-//    {
-//        return Validator::make($data, [
-//            'name' => ['required', 'string', 'max:255'],
-//            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-//            'password' => ['required', 'string', 'min:6', 'confirmed'],
-//        ]);
-//    }
 
 
     public function index(User $user = null, Category $category = null)
@@ -87,7 +75,7 @@ class PostController extends Controller
 
         auth()->user()->publishPost( $category, $post );
 
-        session()->flash('message', "New article saved");
+        set_flash('New article saved');
 
         return redirect()->route('post.index');
     }
@@ -95,7 +83,7 @@ class PostController extends Controller
 
     public function show(Post $post) {
         if( ! $post->published() ) {
-            throw new NotFoundHttpException();
+            abort(404, 'Article not found');
         }
 
         return view('post.show', compact('post'));
@@ -103,8 +91,11 @@ class PostController extends Controller
 
 
     public function edit(Post $post) {
-        // ToDo: use Gates or Authorize to implement this check
-        if( ! $post->author() ) {
+        // $this->authorize('update', $post);
+
+        if(auth()->user()->cant('update', $post)) {
+            // ToDo: customize error messages class
+            set_flash('You are not authorized to perform this action', 'danger');
             return redirect()->back();
         }
 
@@ -115,7 +106,7 @@ class PostController extends Controller
 
 
     public function update(PostRequest $request, Post $post) {
-        // ToDo: use Gates (instead of Authorize) to implement this check
+        $this->authorize('update', $post);
 
         $category = Category::find($request->input('category'));
 
@@ -127,20 +118,18 @@ class PostController extends Controller
 
         auth()->user()->publishPost( $category, $post );
 
-        session()->flash('message', "Article updated");
+        set_flash('Article updated');
 
         return redirect()->route('post.show', ['post' => $post ]);
     }
 
 
     public function destroy(PostRequest $request, Post $post) {
-        // ToDo: add 'delete' action button in post.index-author view
+        $this->authorize('delete', $post);
 
         $post->delete();
 
-//        dd( Post::onlyTrashed()->restore() );
-
-        session()->flash('message', "Article deleted");
+        set_flash('Article deleted');
 
         return redirect()->route('post.index');
     }

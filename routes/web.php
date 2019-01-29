@@ -44,9 +44,9 @@ Route::name('post.')->group(function () {
     Route::get('/posts/by/{user}/in/{category}', 'PostController@index')->name('author.category');
     Route::get('/posts/by/{user}', 'PostController@index_author')->name('author');
     Route::get('/posts/in/{category}', 'PostController@index_category')->name('category');
-    Route::get('/posts/create', 'PostController@create')->name('create');
+    Route::get('/posts/create', 'PostController@create')->name('create')/*->middleware('can:create,App\Post')*/;
     Route::post('/posts', 'PostController@store')->name('store');
-    Route::get('/posts/{post}/edit', 'PostController@edit')->name('edit');
+    Route::get('/posts/{post}/edit', 'PostController@edit')->name('edit')/*->middleware('can:update,post')*/;
     Route::get('/posts/{post}', 'PostController@show')->name('show')/*->where('name', '[A-Za-z0-9-]+')*/;
     Route::put('/posts/{post}', 'PostController@update')->name('update');
     Route::delete('/posts/{post}', 'PostController@destroy')->name('delete');

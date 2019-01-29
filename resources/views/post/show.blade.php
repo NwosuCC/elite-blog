@@ -26,13 +26,13 @@
                   </a>
                 </small>
 
-                @if( auth()->id() === $post->user_id )
-                  <small class="d-inline-block pl-2 border-left">
-                    <a class="nav-link d-inline-block p-0" href="{{ route('post.edit', [$post]) }}">
-                      {{ __('Edit Article') }}
-                    </a>
-                  </small>
-                @endif
+                @can('update', $post)
+                <small class="d-inline-block pl-2 border-left">
+                  <a class="nav-link d-inline-block p-0" href="{{ route('post.edit', [$post]) }}">
+                    {{ __('Edit Article') }}
+                  </a>
+                </small>
+                @endcan
               </div>
             </div>
           </div>
@@ -58,7 +58,9 @@
               </span>
             </small>
 
-            <div class="pt-4">{{ __($post->body)  }}</div>
+            <div class="pt-4">
+              {{ __($post->body)  }}
+            </div>
           </div>
         </div>
       </div>

@@ -14,12 +14,9 @@ class PostRequest extends FormRequest
      */
     public function authorize()
     {
-        $post = $this->route('post');
+        // Authorization already implemented in \App\Policies\PostPolicy::class
 
-        return $post && $this->user()->id === $post->user()->first()->id;
-
-//        dd($this->user()->can('update', $post));
-//        return $post && $this->user()->can('update', $post);
+        return true;
     }
 
     /**

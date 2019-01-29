@@ -27,6 +27,7 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
+                                    <th>Rank</th>
                                     <th>Description</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
@@ -36,6 +37,7 @@
                                     <tr>
                                         <td>{{ $i + 1 }}</td>
                                         <td>{{ $role->name  }}</td>
+                                        <td>{{ $role->rank  }}</td>
                                         <td>{{ $role->description  }}</td>
                                         <td class="px-0 text-center">
                                             <i class="fa fa-edit mx-md-2 py-0 px-2 btn btn-light" onclick="edit('{{$role->formValues}}')"></i>
@@ -181,7 +183,7 @@
                       <i class="fa fa-exclamation-triangle fa-2x align-self-center" style="color: indianred;"></i>
                   </div>
                   <div class="col-11 pl-4">
-                      <div>All Posts under this role will also be deleted</div>
+                      <div>All Users having this role will also be deactivated</div>
                       <div>Delete role "<b id="prompt"></b>" ?</div>
                   </div>
                 </div>

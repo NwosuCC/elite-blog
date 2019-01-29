@@ -33,7 +33,7 @@ class CategoryController extends Controller
 
         auth()->user()->createCategory( new Category($data) );
 
-        session()->flash('message', "New category saved");
+        set_flash("New category saved");
 
         return redirect()->route('category.index');
     }
@@ -52,7 +52,7 @@ class CategoryController extends Controller
             'slug' => str_slug( $request->input('name') ),
         ]);
 
-        session()->flash('message', "Category updated");
+        set_flash("Category updated");
 
         return redirect()->route('category.index');
     }
@@ -63,7 +63,7 @@ class CategoryController extends Controller
         // ToDO: Delete a Category? What happens to the Posts under it?? (See PostController@index)
         $category->delete();
 
-        session()->flash('message', "Category deleted");
+        set_flash("Category deleted");
 
         return redirect()->route('category.index');
     }
