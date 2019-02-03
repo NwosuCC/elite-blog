@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -11,6 +13,18 @@ class CategoryController extends Controller
     public function __construct()
     {
         $this->middleware(['auth', 'admin']);
+    }
+
+
+    protected function validator(array $data, $category = null)
+    {
+        return Validator::make($data, [
+            'name' => [
+                'required', 'min:3', 'max:63',
+                RUle::unique('categories')->ignore($category ? $category->id : '')
+            ],
+            'description'  => ['required', 'min:3']
+        ])->validate();
     }
 
 
@@ -23,10 +37,7 @@ class CategoryController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate(request(), [
-            'name' => 'required|unique:categories|min:3|max:30',
-            'description'  => 'required'
-        ]);
+        $this->validator($request->all());
 
         $data = $request->only(['name', 'description']);
         $data['slug'] = str_slug( $data['name'] );
@@ -40,10 +51,7 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
-        $this->validate(request(), [
-            'name' => 'required|min:3|max:30',
-            'description'  => 'required'
-        ]);
+        $this->validator($request->all(), $category);
 
         // ToDO: Update a Category? How about the Bookmarks using the former slug?? Any backwards compatibility???
         $category->update([

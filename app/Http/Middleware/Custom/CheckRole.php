@@ -19,7 +19,7 @@ class CheckRole
     public function handle($request, Closure $next, $role)
     {
         if (! $request->user()->hasRole($role)) {
-            return redirect()->route('login');
+            abort(403, 'This action is not authorized!');
         }
 
         return $next($request);

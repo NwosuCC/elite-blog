@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Role;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
@@ -11,6 +13,23 @@ class RoleController extends Controller
     public function __construct()
     {
         $this->middleware(['auth', 'admin']);
+        $this->middleware([Role::str('SuperAdmin')])->except(['index']);
+    }
+
+    protected function validator(array $data, $role = null)
+    {
+        return Validator::make($data, [
+            'name' => [
+                'required', 'min:3', 'max:63',
+                RUle::unique('roles')->ignore($role ? $role->id : '')
+            ],
+            'description'  => ['required', 'min:3']
+        ])->validate();
+
+        /*if($validator->fails()) {
+//            return redirect( url()->previous() )->withErrors($validator)->withInput();
+            return redirect( url()->previous() )->withErrors($validator, 'create')->withInput();
+        }*/
     }
 
 
@@ -23,13 +42,13 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate(request(), [
-            'name' => 'required|unique:roles|min:3|max:30',
-            'description'  => 'required'
-        ]);
+        $this->validator($request->all());
 
-        $data = $request->only(['name', 'description']);
-        $data['slug'] = str_slug( $data['name'] );
+        $data = [
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'slug' => str_slug( $request->input('name') ),
+        ];
 
         auth()->user()->createRole( new Role($data) );
 
@@ -40,10 +59,7 @@ class RoleController extends Controller
 
     public function update(Request $request, Role $role)
     {
-        $this->validate(request(), [
-            'name' => 'required|min:3|max:30',
-            'description'  => 'required'
-        ]);
+        $this->validator($request->all(), $role);
 
         // ToDO: Update a Role? How about the Bookmarks using the former slug?? Any backwards compatibility???
         $role->update([
@@ -58,11 +74,10 @@ class RoleController extends Controller
     }
 
 
-    public function destroy(Role $role)
+    public function destroy(Request $request, Role $role)
     {
-        if( $role->isDefault ){
+        if($request->user()->cant('delete', $role)) {
             set_flash('Default roles cannot be modified', 'info');
-
             return redirect()->back();
         }
 

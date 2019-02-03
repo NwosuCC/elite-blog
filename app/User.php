@@ -33,25 +33,27 @@ class User extends Authenticatable
         return 'slug';
     }
 
-    public function roles() {
-        return $this->belongsToMany(Role::class)->withTimestamps();
-    }
 
     public function createRole(Role $role) {
         $this->roles()->save($role);
     }
 
-    public function hasRole(Role $role) {
-//        return $this->roles()->where('slug', $role)->exists();
-        return $this->roles()->has( $role );
+    public function roles() {
+        return $this->belongsToMany(Role::class)->withTimestamps();
+    }
+
+    public function hasRole($role) {
+        if(is_string($role)){ $role = Role::of($role); }
+        $role = (array) $role;
+        return !! $this->roles()->find( $role )->first();
     }
 
     public function isAdmin() {
-        return $this->hasRole( Role::admin() );
+        return $this->hasRole( Role::of('Admin') );
     }
 
     public function isSuperAdmin() {
-        return false;
+        return $this->hasRole( Role::of('SuperAdmin') );
     }
 
 

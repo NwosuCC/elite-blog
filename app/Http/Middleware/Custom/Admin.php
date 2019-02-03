@@ -3,6 +3,7 @@
 namespace App\Http\Middleware\Custom;
 
 use Closure;
+use Illuminate\Auth\AuthenticationException;
 
 class Admin
 {
@@ -15,8 +16,8 @@ class Admin
      */
     public function handle($request, Closure $next)
     {
-        if( ! auth()->user()->isAdmin() ) {
-            return redirect()->route('login');
+        if( !$request->user()->isAdmin() ) {
+            abort(403, 'This action is not authorized!');
         }
 
         return $next($request);

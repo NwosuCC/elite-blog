@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Str;
+use Illuminate\Support\MessageBag;
+use Illuminate\Support\ViewErrorBag;
 
 
 if (! function_exists('user_slug')) {
@@ -67,6 +69,37 @@ if (! function_exists('get_flash')) {
         }
 
         return [];
+    }
+}
+
+if (! function_exists('errors_json')) {
+    /**
+     * Convert laravel messageBag to json string
+     *
+     * @param   object  $errors The messageBag instance
+     * @return  string
+     */
+    function errors_json($errors)
+    {
+        $errorBag = [];
+
+        $bagsKeys = array_keys( $errors->getBags() );
+
+        foreach ($bagsKeys as $bagKey) {
+            $bag = $errors->getBag($bagKey)->__toString();
+
+            $errors_str = str_replace(
+                '["', '"', str_replace('"]', '"', $bag)
+            );
+
+            $errorBag[$bagKey] = json_decode($errors_str);
+        }
+
+        if(count($bagsKeys) === 1 && $bagsKeys[0] === 'default'){
+            $errorBag = array_shift($errorBag);
+        }
+
+        return json_encode($errorBag);
     }
 }
 

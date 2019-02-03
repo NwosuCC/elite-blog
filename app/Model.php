@@ -20,7 +20,10 @@ class Model extends Eloquent
 
 
     public function getFormValuesAttribute() {
-        return json_encode( $this->only($this->fillable) );
+        return json_encode([
+            'routeKey' => $this->getRouteKey(),
+            'fields' => $this->only($this->fillable),
+        ]);
     }
 
 

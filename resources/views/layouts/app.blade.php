@@ -53,6 +53,7 @@
                                   <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                               </li>
                           @endif
+                        <!-- Authenticated User Menu -->
                         @else
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -60,6 +61,10 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="#">
+                                        {{ __('Switch Account') }}
+                                    </a>
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -98,8 +103,23 @@
 </body>
 <script>
     /* Global helper functions */
+    const Str = (() => {
+      return {
+        titleCase: (string) => {
+          let words = String( string ).toLowerCase().split(" ").filter(w => !!w).map(w => w.split(''));
+          return words.map(word => word.shift().toUpperCase() + word.join("") ).join(' ');
+        }
+      };
+    })();
+    const tryCatch = (callback, params) => {
+        try{ return callback.apply(undefined, params) } catch (error){ console.log(error); }
+    };
     const parseToJSON = (stringObject) => {
-        try{ return JSON.parse(stringObject); } catch (error){ console.log(error); }
+        return tryCatch((str) => { return JSON.parse(str); }, [stringObject]);
+    };
+    const getErrorBag = () => {
+      let php_errors = '@if($str = errors_json($errors)) <?= $str?> @endif';
+      return php_errors ? parseToJSON(php_errors) : {};
     };
 </script>
 </html>
