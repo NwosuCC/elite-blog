@@ -45,7 +45,8 @@
                                         <td>{{ $role->rank  }}</td>
                                         <td>{{ $role->description  }}</td>
                                         <td class="text-center">
-                                          {{ __($role->users()->count()) }}
+{{--                                          {{ __($role->users()->count()) }}--}}
+                                          {{ __($role->users_count) }}
                                         </td>
                                         @can('update', $role)
                                           <td class="px-0 text-center">

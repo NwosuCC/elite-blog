@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -30,7 +31,14 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = Category::latest()->get();
+//        $categories = Category::latest()->get();
+
+        $categories = Category::latest()
+          ->withCount([
+            'posts',
+            'posts AS published' => function($q) { $q->published(); }
+            ])
+          ->get();
 
         return view('category.index', compact('categories'));
     }

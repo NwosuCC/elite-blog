@@ -26,6 +26,10 @@ class PostController extends Controller
         switch (true) {
             case ($user and $category) : {
                 $posts = $user->posts()->filter($category); break;
+                /*$posts = $user->posts()->with([
+                  'category' => function($q) use($category) { return $q->where('ids', $category->id); }
+                ]);*/
+                break;
             }
             case ($user) : {
                 $posts = $user->posts(); break;
@@ -35,6 +39,7 @@ class PostController extends Controller
             }
             default : { $posts = Post::latest(); }
         }
+//        dd($posts->get()[1]->category);
 
         $posts = $posts->filter()->published()->get();
 

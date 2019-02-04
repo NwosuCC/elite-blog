@@ -108,6 +108,10 @@ class Role extends Model
         return $query->whereIn('rank', static::DEFAULT_RANKS);
     }
 
+    public function scopeRanked($query){
+        return $query->orderBy('rank', 'asc');
+    }
+
 
     public function users() {
         return $this->belongsToMany(User::class)->withTimestamps();

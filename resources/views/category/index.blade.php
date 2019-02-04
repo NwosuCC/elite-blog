@@ -35,6 +35,7 @@
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th class="text-center">Posts</th>
+                                    <th class="text-center">Published</th>
                                     <th class="text-center">Actions</th>
                                 </tr>
                                 </thead>
@@ -45,8 +46,13 @@
                                         <td>{{ $category->name  }}</td>
                                         <td>{{ $category->description  }}</td>
                                         <td class="text-center">
+{{--                                          {{ __($category->posts()->count()) }}--}}
+                                          {{ __($category->posts_count) }}
+                                        </td>
+                                        <td class="text-center">
                                           <a class="nav-link d-inline-block p-0" href="{{ route('post.category', ['category' => $category->slug]) }}">
-                                            {{ __($category->posts()->published()->count()) }}
+{{--                                            {{ __($category->posts()->published()->count()) }}--}}
+                                            {{ __($category->published) }}
                                           </a>
                                         </td>
                                         <td class="px-0 text-center">
