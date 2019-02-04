@@ -21,7 +21,7 @@ class CategoryController extends Controller
         return Validator::make($data, [
             'name' => [
                 'required', 'min:3', 'max:63',
-                RUle::unique('categories')->ignore($category ? $category->id : '')
+                RUle::unique('categories')->whereNull('deleted_at')->ignore($category ? $category->id : '')
             ],
             'description'  => ['required', 'min:3']
         ])->validate();

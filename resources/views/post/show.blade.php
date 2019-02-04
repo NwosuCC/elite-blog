@@ -52,7 +52,7 @@
               </span>
               <span class="mr-4">
                 <b>Category</b>:
-                <a class="nav-link d-inline-block p-0" href="{{ route('post.category', ['category' => str_slug($post->category->name)]) }}">
+                <a class="nav-link d-inline-block p-0" href="{{ route('post.category', ['category' => $post->category->slug]) }}">
                   {{ __($post->category->name) }}
                 </a>
               </span>

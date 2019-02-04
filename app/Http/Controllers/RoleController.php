@@ -21,7 +21,7 @@ class RoleController extends Controller
         return Validator::make($data, [
             'name' => [
                 'required', 'min:3', 'max:63',
-                RUle::unique('roles')->ignore($role ? $role->id : '')
+                RUle::unique('roles')->whereNull('deleted_at')->ignore($role ? $role->id : '')
             ],
             'description'  => ['required', 'min:3']
         ])->validate();

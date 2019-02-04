@@ -15,7 +15,7 @@ if (! function_exists('user_slug')) {
      */
     function user_slug($name = '')
     {
-        if(!$name && !auth()->user()){
+        if(!$name && !auth()->check()){
             return '';
         }
 
