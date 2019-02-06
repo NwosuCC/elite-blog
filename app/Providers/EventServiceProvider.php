@@ -18,6 +18,10 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        // Run 'php artisan event:generate' to generate the non-existent class files
+        'App\Events\PostSaved' => [
+            'App\Listeners\BroadcastNewPostNotification'
+        ],
     ];
 
     /**

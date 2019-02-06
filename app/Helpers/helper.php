@@ -63,7 +63,7 @@ if (! function_exists('get_flash')) {
     function get_flash()
     {
         if(session('message')) {
-            $flash = explode('|', session('message'));
+            $flash = explode('|', session()->pull('message'));
 
             return array_combine( ['message', 'type'], array_pad($flash, 2, ''));
         }

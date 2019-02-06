@@ -29,6 +29,7 @@ class Category extends Model
     }
 
     public function addPost(Post $post) {
+//        $post->category_id = $this->id;
         $post->setAttribute('category_id', $this->getAttribute('id'));
         return $post;
     }

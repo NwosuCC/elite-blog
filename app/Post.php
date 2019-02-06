@@ -3,13 +3,32 @@
 namespace App;
 
 
+use App\Events\PostSaved;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 
 class Post extends Model
 {
     protected $fillable = [
         'title', 'body', 'slug', 'published_at'
     ];
+
+    protected $events = [
+      'created' => PostSaved::class,
+      'updated' => PostSaved::class,
+      'deleting' => PostSaved::class,
+      'deleted' => PostSaved::class,
+    ];
+
+
+    protected static function boot() {
+        parent::boot();
+
+        // ToDo: find a more standard fix for this filter (posts whose category is deleted must NOT be retrieved)
+        static::addGlobalScope('category', function (Builder $builder){
+           $builder->whereIn('category_id', Category::pluck('id'));
+        });
+    }
 
 
     public function getRouteKeyName() {
@@ -27,12 +46,8 @@ class Post extends Model
     }
 
 
-    public function scopeFilter($query, $category = null){
-        $categoryGroup = $category
-            ? array_values( $category->only('id') )
-            : Category::all()->pluck('id');
-
-        return $query->whereIn('category_id', $categoryGroup);
+    public function scopeIn($query, $category = null){
+        return $category ? $query->where('category_id', $category->id) : null;
     }
 
 

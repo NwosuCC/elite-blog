@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostSaved;
 use App\Http\Requests\PostRequest;
 use App\User;
 use App\Category;
@@ -23,25 +24,9 @@ class PostController extends Controller
 
     public function index(User $user = null, Category $category = null)
     {
-        switch (true) {
-            case ($user and $category) : {
-                $posts = $user->posts()->filter($category); break;
-                /*$posts = $user->posts()->with([
-                  'category' => function($q) use($category) { return $q->where('ids', $category->id); }
-                ]);*/
-                break;
-            }
-            case ($user) : {
-                $posts = $user->posts(); break;
-            }
-            case ($category) : {
-                $posts = $category->posts(); break;
-            }
-            default : { $posts = Post::latest(); }
-        }
-//        dd($posts->get()[1]->category);
+        $posts = $user ? $user->posts() : Post::latest();
 
-        $posts = $posts->filter()->published()->get();
+        $posts = $posts->published()->in($category)->get();
 
         $categories = Category::latest()->get();
 
@@ -96,8 +81,6 @@ class PostController extends Controller
 
 
     public function edit(Post $post) {
-        // $this->authorize('update', $post);
-
         if(auth()->user()->cant('update', $post)) {
             // ToDo: customize error messages class
             set_flash('You are not authorized to perform this action', 'danger');
@@ -123,7 +106,10 @@ class PostController extends Controller
 
         auth()->user()->publishPost( $category, $post );
 
-        set_flash('Article updated');
+        event(new PostSaved($post));
+
+        [$message, $type] = $post->getChanges() ? ['Article updated', ''] : ['No changes made', 'info'];
+        set_flash($message, $type);
 
         return redirect()->route('post.show', ['post' => $post ]);
     }

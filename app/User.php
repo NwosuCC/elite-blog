@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -54,6 +55,13 @@ class User extends Authenticatable
 
     public function isSuperAdmin() {
         return $this->hasRole( Role::of('SuperAdmin') );
+    }
+
+    // ToDo: Review this later
+    public function assign(Role $role, $temp = true) {
+        $expires = $temp !== false ? Carbon::now()->addWeeks(2) : null;
+        $this->roles()->attach($role->id, ['expires' => $expires]);
+//        $this->roles()->toggle($role->id, ['expires' => $expires]);
     }
 
 
