@@ -50,7 +50,7 @@
                                           {{ __($category->posts_count) }}
                                         </td>
                                         <td class="text-center">
-                                          <a class="nav-link d-inline-block p-0" href="{{ route('post.category', ['category' => $category->slug]) }}">
+                                          <a class="nav-link d-inline-block p-0" href="{{ app('App\Post')->route->index_category($category) }}">
 {{--                                            {{ __($category->posts()->published()->count()) }}--}}
                                             {{ __($category->published) }}
                                           </a>

@@ -12,7 +12,7 @@
                     </div>
                     <div class="ml-auto">
                       <small>
-                        <a class="nav-link p-0" href="{{ route('post.create') }}">{{ __('Publish an Article') }}</a>
+                        <a class="nav-link p-0" href="{{ app('App\Post')->route->create() }}">{{ __('Publish an Article') }}</a>
                       </small>
                     </div>
                   </div>
@@ -78,7 +78,7 @@
                             </span>
 
                             <small class="d-inline-block">
-                              <a class="nav-link p-0" href="{{ route('post.show', ['post' => $post->slug]) }}">
+                              <a class="nav-link p-0" href="{{ $post->route->show }}">
                                 {{ __('Read more >>') }}
                               </a>
                             </small>

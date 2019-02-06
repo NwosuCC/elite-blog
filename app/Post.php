@@ -4,6 +4,7 @@ namespace App;
 
 
 use App\Events\PostSaved;
+use App\Presenters\PostUrlPresenter;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -12,6 +13,8 @@ class Post extends Model
     protected $fillable = [
         'title', 'body', 'slug', 'published_at'
     ];
+
+    protected $prepend = ['route'];
 
     protected $events = [
       'created' => PostSaved::class,
@@ -33,6 +36,13 @@ class Post extends Model
 
     public function getRouteKeyName() {
         return 'slug';
+    }
+
+    public function getRouteAttribute() {
+      $options = [
+//        'name_prefix' => 'post',
+      ];
+      return new PostUrlPresenter($this, $options);
     }
 
 

@@ -12,10 +12,10 @@
               </div>
               <div class="ml-auto">
                 <small class="d-inline-block px-2">
-                  <a class="nav-link p-0" href="{{ route('post.index') }}">{{ __('Home') }}</a>
+                  <a class="nav-link p-0" href="{{ app('App\Post')->route->index }}">{{ __('Home') }}</a>
                 </small>
                 <small class="d-inline-block pl-2 border-left">
-                  <a class="nav-link p-0" href="{{ route('post.author', ['user' => user_slug()]) }}">
+                  <a class="nav-link p-0" href="{{ app('App\Post')->route->index_author(auth()->user()) }}">
                     {{ __('My Articles') }}
                   </a>
                 </small>
@@ -24,7 +24,7 @@
           </div>
 
           <div class="card-body">
-            <form method="POST" action="{{ route('post.store') }}">
+            <form method="POST" action="{{ app('App\Post')->route->store }}">
               @csrf
 
               <div class="form-group row">
