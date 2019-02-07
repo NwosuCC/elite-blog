@@ -40,7 +40,6 @@ class UrlPresenter
       if(is_numeric($key) && $value instanceof Model) {
         $key = strtolower(class_basename($value));
       }
-
       $route_params[$key] = $value;
     }
 

@@ -45,7 +45,6 @@ class ModelUrlPresenter extends UrlPresenter
 
   public function edit()
   {
-    if($this->model->exists) dd($this->model);
     return $this->routeFor('edit', [$this->model]);
   }
 

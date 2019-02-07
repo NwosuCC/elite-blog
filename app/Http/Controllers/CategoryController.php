@@ -31,16 +31,17 @@ class CategoryController extends Controller
 
     public function index()
     {
-//        $categories = Category::latest()->get();
-
         $categories = Category::latest()
           ->withCount([
             'posts',
-            'posts AS published' => function($q) { $q->published(); }
-            ])
+            'posts AS published_count' => function($q) { $q->published(); }
+          ])
           ->get();
 
-        return view('category.index', compact('categories'));
+        $M_Category = new Category;
+        $M_Post = new Post;
+
+        return view('category.index', compact('M_Category', 'M_Post', 'categories'));
     }
 
     public function store(Request $request)

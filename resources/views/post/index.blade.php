@@ -12,7 +12,7 @@
                     </div>
                     <div class="ml-auto">
                       <small>
-                        <a class="nav-link p-0" href="{{ app('App\Post')->route->create() }}">{{ __('Publish an Article') }}</a>
+                        <a class="nav-link p-0" href="{{ $M_Post->route->create }}">{{ __('Publish an Article') }}</a>
                       </small>
                     </div>
                   </div>
@@ -24,41 +24,14 @@
                             <span class="pr-3">Filter posts by:</span>
                             <span class="pr-1 font-weight-bold">Category</span>
                             <div class="d-inline-block">
-                                <select id="category" onchange="goTo(this.value);" class="form-control-sm" name="category" style="font-size: 14px;" required title="">
+                                <select id="category" onchange="window.location.href = this.value;" class="form-control-sm" name="category" style="font-size: 14px;" required title="">
                                     <option value=""> All Categories </option>
                                     @foreach($categories as $cat)
-                                        <option value="{{ $cat->slug }}" {{$category && $category->slug === $cat->slug ? 'selected' : ''}}>
+                                        <option value="{{$M_Post->route->index_filters($user, $cat) }}" {{$category && $category->slug === $cat->slug ? 'selected' : ''}}>
                                             {{ $cat->name }}
                                         </option>
                                     @endforeach
                                 </select>
-                                {{-- Script function goto() --}}
-                                <script>
-                                    const goTo = (category) => {
-                                        let href = '', author = '{{ $user ? $user->slug : '' }}';
-
-                                        switch (true) {
-                                            case !!(author && category) : {
-                                                href = '{{route('post.author.category',['user'=>'', 'category'=>''])}}/' + category;
-                                                href = href.replace('by/', 'by/' + author);
-                                                break;
-                                            }
-                                            case !!(author) : {
-                                                href = '{{route('post.author',['user'=>''])}}/' + author;
-                                                break;
-                                            }
-                                            case !!(category) : {
-                                                href = '{{route('post.category',['category'=>''])}}/' + category;
-                                                break;
-                                            }
-                                            default : {
-                                                href = '{{route('post.index')}}/';
-                                            }
-                                        }
-
-                                        window.location.href = href;
-                                    }
-                                </script>
                             </div>
                         </div>
                     </div>

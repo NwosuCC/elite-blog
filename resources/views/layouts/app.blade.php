@@ -43,17 +43,17 @@
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->
                     @guest
-                    @if(url()->current() !== route('login'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                    @endif
-                    @if (Route::has('register') && url()->current() !== route('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                    @endif
-                <!-- Authenticated User Menu -->
+                      @if(url()->current() !== route('login'))
+                          <li class="nav-item">
+                              <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                          </li>
+                      @endif
+                      @if (Route::has('register') && url()->current() !== route('register'))
+                          <li class="nav-item">
+                              <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                          </li>
+                      @endif
+                    <!-- Authenticated User Menu -->
                     @else
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
@@ -131,7 +131,7 @@
           tryCatch: (callback) => tryCatch(callback),
           getErrorBag: () => getErrorBag(),
           method: '<?=old("_method")?>',
-          routeKey: '<?=old("_routeKey")?>',
+          route: '<?=old("_route")?>',
           warn: (text) => console.warn(text),
         },
         init: (modelOptions) => {
@@ -172,10 +172,8 @@
             if(Object.keys(MF.View.all).length <= 0){
               MF.View.types.forEach(type => {
                 let objPath = ['actions', '.', type].join('');
-                let [formId, modalId, routeUrl] = MF.ModelObject.get(objPath);
-                MF.View.all[type] = {
-                  form: $('#' + formId), modal: $('#' + modalId), route: routeUrl
-                };
+                let [formId, modalId] = MF.ModelObject.get(objPath);
+                MF.View.all[type] = { form: $('#' + formId), modal: $('#' + modalId) };
               });
             }
           },
@@ -193,8 +191,7 @@
           },
           get: (prop) => {
             if(!prop){
-              if(MF.ErrorBag.hasNone()){ MF.ErrorBag.all = MF.ext.getErrorBag(); }
-              return MF.ErrorBag;
+              return MF.ext.warn(`ModelObject.get() requires parameter 'prop'`);
             }
             return MF.ext.tryCatch(() => {
               return prop.split('.').reduce((obj, i) => !obj[i].empty ? obj[i] : null, MF.ModelObject.props);
@@ -203,9 +200,7 @@
         },
         Form: {},
         Modal: {},
-        Labels: {
-          title: '', button: '', method: '', action:''
-        },
+        Labels: { title: '', button: '' },
         ErrorBag: {
           all: {},
           count: () => Object.keys(MF.ErrorBag.all).length,
@@ -221,14 +216,13 @@
           empty: () => { MF.ErrorBag.all = {}; }
         },
         setViewComponents: (type) => {
-          MF.Form = MF.View.get(type).form;
           MF.Modal = MF.View.get(type).modal;
+          MF.Form = MF.View.get(type).form;
+          MF.Form.find('input[name="_method"]').val( MF.Method.get(type) );
         },
         setFormView: () => {
-          let {method, action} = MF.Labels;
-
-          MF.Form.find('input[name="_method"]').val(method);
-          MF.Form.attr( 'action', action );
+          MF.Form.attr( 'action', MF.ext.route );
+          MF.Form.prepend( $('<input/>').attr({type:'hidden', name:'_route'}).val(MF.ext.route) );
 
           if(MF.ErrorBag.hasNone()){
             MF.Form.find('.invalid-feedback').addClass('d-none');
@@ -248,53 +242,44 @@
 
           return MF.Modal;
         },
-        getRouteUrl: (type) => {
-          let _routeKey = MF.ext.routeKey;
-          MF.Form.prepend( $('<input/>').attr({type:'hidden', name:'_routeKey'}).val(_routeKey) );
-
-          let RouteKeyName = [MF.ModelObject.name.toLowerCase(), 'route', 'key'].join('-');
-          return MF.View.get(type).route.replace(new RegExp(RouteKeyName, 'g'), _routeKey);
-        },
         showModal: () => {
           MF.setFormView();
           MF.setModalView().modal('show');
         },
-        create: () => {
+        create: (createParams) => {
           MF.setViewComponents('create');
 
           if(MF.ErrorBag.hasNone() || MF.Method.isNot('create')) {
             MF.Form.find('input,textarea').not('[type="hidden"]').val('');
+            MF.ext.route = createParams.route;
           }
 
           MF.Labels = {
             title: 'Create A {ModelName}', button: 'Create {ModelName}',
-            method: 'POST', action: MF.getRouteUrl('create')
           };
 
           MF.showModal();
         },
-        edit: (formValues) => {
-          console.log('formValues: ', formValues);
+        edit: (editParams) => {
           MF.setViewComponents('edit');
 
           if(MF.ErrorBag.hasNone() || MF.Method.isNot('edit')) {
-            let {fields, routeKey} = formValues;
-            MF.ext.routeKey = routeKey;
+            let {fields, route} = editParams;
+            MF.ext.route = route;
             Object.keys(fields).forEach(key => MF.Form.find('#'+key).val( fields[key] ) );
           }
 
           MF.Labels = {
-            title: `Edit {ModelName}`, button: `Update {ModelName}`, method: 'PUT',
-            action: MF.getRouteUrl('edit')
+            title: `Edit {ModelName}`, button: `Update {ModelName}`
           };
 
           MF.showModal();
         },
-        trash: (formValues) => {
+        trash: (deleteParams) => {
           MF.setViewComponents('trash');
 
-          let {fields, routeKey} = formValues;
-          MF.ext.routeKey = routeKey;
+          let {fields, route} = deleteParams;
+          MF.ext.route = route;
 
           let {name, titleField, deleteInfo} = MF.ModelObject.props;
           let TITLE = MF.ext.Str().titleCase( fields[titleField] );
@@ -304,8 +289,7 @@
           MF.Form.find('.delete-model-title').text( TITLE );
 
           MF.Labels = {
-            title: `Delete {ModelName}`, button: `Delete {ModelName}`, method: 'DELETE',
-            action: MF.getRouteUrl('trash')
+            title: `Delete {ModelName}`, button: `Delete {ModelName}`,
           };
 
           MF.showModal();

@@ -12,7 +12,7 @@
                             </div>
                             <div class="ml-auto">
                                 <small>
-                                    <a href="#" onclick="MF.create()" class="nav-link p-0">
+                                    <a href="#" onclick="MF.create({{$M_Category->createParams}})" class="nav-link p-0" data-toggle="modal">
                                         {{ __('Add a Category') }}
                                     </a>
                                 </small>
@@ -21,12 +21,6 @@
                     </div>
 
                     <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover">
                                 <thead>
@@ -46,18 +40,16 @@
                                         <td>{{ $category->name  }}</td>
                                         <td>{{ $category->description  }}</td>
                                         <td class="text-center">
-{{--                                          {{ __($category->posts()->count()) }}--}}
                                           {{ __($category->posts_count) }}
                                         </td>
                                         <td class="text-center">
-                                          <a class="nav-link d-inline-block p-0" href="{{ app('App\Post')->route->index_category($category) }}">
-{{--                                            {{ __($category->posts()->published()->count()) }}--}}
-                                            {{ __($category->published) }}
+                                          <a class="nav-link d-inline-block p-0" href="{{ $M_Post->route->index_category($category) }}">
+                                            {{ __($category->published_count) }}
                                           </a>
                                         </td>
                                         <td class="px-0 text-center">
-                                            <i class="fa fa-edit py-0 px-2 btn btn-light" onclick="MF.edit({{$category->formValues}})"></i>
-                                            <i class="fa fa-trash py-0 px-2 btn btn-light" onclick="MF.trash({{$category->formValues}})"></i>
+                                            <i class="fa fa-edit py-0 px-2 btn btn-light" onclick="MF.edit({{$category->editParams}})"></i>
+                                            <i class="fa fa-trash py-0 px-2 btn btn-light" onclick="MF.trash({{$category->deleteParams}})"></i>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -72,15 +64,9 @@
                                   fields: ['name', 'description'],
                                   titleField: 'name',
                                   actions: {
-                                    create: [
-                                      'categoryForm', 'addCategoryModal', '{{route("category.store")}}'
-                                    ],
-                                    edit: [
-                                      'categoryForm', 'addCategoryModal', '{{route("category.update", ['category' => 'category-route-key'])}}'
-                                    ],
-                                    trash: [
-                                      'deleteForm', 'deleteModal', '{{route("category.delete", ['category' => 'category-route-key'])}}'
-                                    ]
+                                    create: ['categoryForm', 'addCategoryModal'],
+                                    edit: ['categoryForm', 'addCategoryModal'],
+                                    trash: ['deleteForm', 'deleteModal']
                                   },
                                   deleteInfo: 'All Posts under this category will also be deleted',
                                 });
@@ -107,7 +93,7 @@
             </button>
           </div>
 
-          <form id="categoryForm" method="POST" action="{{ route('category.store') }}">
+          <form id="categoryForm" method="POST" action="{{ $M_Category->route->store }}">
             @csrf
               {{ method_field('PUT') }}
 

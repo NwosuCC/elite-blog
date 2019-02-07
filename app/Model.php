@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Presenters\ModelUrlPresenter;
 
 class Model extends Eloquent
 {
@@ -19,36 +20,28 @@ class Model extends Eloquent
     protected $dates = ['deleted_at'];
 
 
-    public function getFormValuesAttribute() {
-        return json_encode([
-            'routeKey' => $this->getRouteKey(),
-            'fields' => $this->only($this->fillable),
-        ]);
+    public function getRouteAttribute() {
+      return new ModelUrlPresenter($this);
     }
 
-
-    protected static $errors = [
-        'no_action' => 'You are not authorized to perform this action',
-        'no_modify' => 'You do not have permission to modify this {model}',
-    ];
-
-    const ERROR_NO_ACTION = 'no_action';
-    const ERROR_NO_MODIFY = 'no_modify';
-
-
-    public static function error($key, $class = ''){
-        $error_message = retry(1, function() use ($key) {
-            return static::$errors[$key];
-        });
-
-        if($class) {
-            $model = strtolower( class_basename($class) );
-
-            $error_message = str_replace('{model}', $model, $error_message);
-        }
-
-        return $error_message;
+    public function getCreateParamsAttribute() {
+      return json_encode([
+        'route' => $this->route->store,
+      ]);
     }
 
+    public function getEditParamsAttribute() {
+      return json_encode([
+        'fields' => $this->only($this->fillable),
+        'route' => $this->route->update,
+      ]);
+    }
+
+    public function getDeleteParamsAttribute() {
+      return json_encode([
+        'fields' => $this->only($this->fillable),
+        'route' => $this->route->delete,
+      ]);
+    }
 
 }

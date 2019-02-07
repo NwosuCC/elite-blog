@@ -13,7 +13,7 @@
                             <div class="ml-auto">
                                 <small>
                                   @can('create', 'App\Role')
-                                    <a href="javascript:" onclick="MF.create()" class="nav-link p-0">
+                                    <a href="#" onclick="MF.create({{$M_Role->createParams}})" class="nav-link p-0" data-toggle="modal">
                                         {{ __('Add a Role') }}
                                     </a>
                                   @endcan
@@ -45,15 +45,14 @@
                                         <td>{{ $role->rank  }}</td>
                                         <td>{{ $role->description  }}</td>
                                         <td class="text-center">
-{{--                                          {{ __($role->users()->count()) }}--}}
                                           {{ __($role->users_count) }}
                                         </td>
                                         @can('update', $role)
                                           <td class="px-0 text-center">
-                                            <i class="fa fa-edit mx-md-2 py-0 px-2 btn btn-light" onclick="MF.edit({{$role->formValues}})"></i>
+                                            <i class="fa fa-edit mx-md-2 py-0 px-2 btn btn-light" onclick="MF.edit({{$role->editParams}})"></i>
 
                                             @can('delete', $role)
-                                              <i class="fa fa-trash mx-md-2 py-0 px-2 btn btn-light" onclick="MF.trash({{$role->formValues}})"></i>
+                                              <i class="fa fa-trash mx-md-2 py-0 px-2 btn btn-light" onclick="MF.trash({{$role->deleteParams}})"></i>
                                             @else
                                               <i class="disabled fa fa-trash mx-md-2 py-0 px-2 btn btn-light" style="color: grey"></i>
                                             @endcan
@@ -72,15 +71,9 @@
                                   fields: ['name', 'description'],
                                   titleField: 'name',
                                   actions: {
-                                    create: [
-                                      'addRoleForm', 'addRoleModal', '{{route("role.store")}}'
-                                    ],
-                                    edit: [
-                                      'addRoleForm', 'addRoleModal', '{{route("role.update", ['role' => 'role-route-key'])}}'
-                                    ],
-                                    trash: [
-                                      'deleteForm', 'deleteModal', '{{route("role.delete", ['role' => 'role-route-key'])}}'
-                                    ]
+                                    create: ['addRoleForm', 'addRoleModal'],
+                                    edit: ['addRoleForm', 'addRoleModal'],
+                                    trash: ['deleteForm', 'deleteModal']
                                   },
                                   deleteInfo: 'All Users having this role will also be deactivated',
                                 });
@@ -107,7 +100,7 @@
             </button>
           </div>
 
-          <form id="addRoleForm" method="POST" action="{{ route('role.store') }}">
+          <form id="addRoleForm" method="POST" action="{{ $M_Role->route->store }}">
             @csrf
               {{ method_field('PUT') }}
 

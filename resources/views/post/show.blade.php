@@ -15,7 +15,7 @@
 
               <div class="ml-auto">
                 <small class="d-inline-block px-2">
-                  <a class="nav-link p-0" href="{{ route('post.index') }}">
+                  <a class="nav-link p-0" href="{{ $post->route->index }}">
                     {{ __('Home') }}
                   </a>
                 </small>
@@ -28,7 +28,7 @@
 
                 @can('update', $post)
                 <small class="d-inline-block pl-2 border-left">
-                  <a class="nav-link d-inline-block p-0" href="{{ route('post.edit', [$post]) }}">
+                  <a class="nav-link d-inline-block p-0" href="{{ $post->route->edit }}">
                     {{ __('Edit Article') }}
                   </a>
                 </small>
@@ -41,7 +41,7 @@
             <small class="row no-gutters">
               <span class="mr-4">
                 <b>Author</b>:
-                <a class="nav-link d-inline-block p-0" href="{{ route('post.author', [$post->user]) }}">
+                <a class="nav-link d-inline-block p-0" href="{{ $post->route->index_author($post->user) }}">
                   {{ __($post->user->name) }}
                 </a>
 
@@ -52,7 +52,7 @@
               </span>
               <span class="mr-4">
                 <b>Category</b>:
-                <a class="nav-link d-inline-block p-0" href="{{ route('post.category', ['category' => $post->category->slug]) }}">
+                <a class="nav-link d-inline-block p-0" href="{{ $post->route->index_category($post->category) }}">
                   {{ __($post->category->name) }}
                 </a>
               </span>

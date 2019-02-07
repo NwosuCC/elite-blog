@@ -35,11 +35,11 @@ class RoleController extends Controller
 
   public function index()
   {
-//        $roles = Role::all();
-
     $roles = Role::ranked()->withCount(['users'])->get();
 
-    return view('role.index', compact('roles'));
+    $M_Role = new Role;
+
+    return view('role.index', compact('M_Role', 'roles'));
   }
 
   public function store(Request $request)

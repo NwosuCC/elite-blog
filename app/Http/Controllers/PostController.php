@@ -30,7 +30,12 @@ class PostController extends Controller
 
         $categories = Category::latest()->get();
 
-        return view('post.index', compact('posts', 'categories', 'user', 'category'));
+        $M_Post = new Post;
+
+        return view(
+            'post.index',
+            compact('M_Post', 'posts', 'categories', 'user', 'category')
+        );
     }
 
 
@@ -49,7 +54,9 @@ class PostController extends Controller
     public function create() {
         $categories = Category::latest()->get();
 
-        return view('post.create', compact('categories'));
+        $M_Post = new Post;
+
+        return view('post.create', compact('M_Post', 'categories'));
     }
 
 
