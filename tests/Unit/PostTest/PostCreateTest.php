@@ -40,14 +40,12 @@ class PostCreateTest extends TestCase
   }
 
   /**
-   * Tests the factory() function with the default value provided as the param
+   * Returns instance(s) of the 'model_name' class according to the $count argument
    * @param int   $count
-   * @testWith    [1]
-   * NOTE: Read more about this at https://phpunit.de
-   *
    * @return mixed
    */
-  protected function factory(int $count = 1) {
+  protected function factory(int $count = 1)
+  {
     return factory($this->model_name, $count);
   }
 
