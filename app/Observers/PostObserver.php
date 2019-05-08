@@ -10,7 +10,7 @@ class PostObserver
     /*
      * NOTES:
      *  1.) This Observer has been registered in AppServiceProvider boot()
-     *  2.) The $events to observe are defined in the model, in this case, Post::class
+     *  2.) The $events to observe are defined in the model, in this case, PostTest::class
      *
      * SEE ALSO: Using Event Subscribers
      * http://laravel.com/docs/5.4/events.html#event-subscribers
@@ -21,7 +21,7 @@ class PostObserver
     }
 
     private function postId($post) {
-        return 'Post [id = "' . $post->id . '"]';
+        return 'PostTest [id = "' . $post->id . '"]';
     }
 
     private function postTitle($post) {

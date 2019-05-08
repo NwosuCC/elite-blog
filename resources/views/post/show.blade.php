@@ -48,7 +48,12 @@
               </span>
               <span class="mr-4">
                 <b>Published</b>:
-                {{ __($post->created_at->diffForHumans()) }}
+                <span class="mr-2">
+                  {{ __($post->published_at->toDayDateTimeString()) }}
+                </span>
+                <span class="mr-1">
+                  ({{ __($post->published_at->diffForHumans()) }})
+                </span>
               </span>
               <span class="mr-4">
                 <b>Category</b>:

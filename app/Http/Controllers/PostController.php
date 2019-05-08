@@ -13,7 +13,6 @@ use Carbon\Carbon;
 
 class PostController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth')->except([
@@ -24,18 +23,15 @@ class PostController extends Controller
 
     public function index(User $user = null, Category $category = null)
     {
-        $posts = $user ? $user->posts() : Post::latest();
+        $Post = Post::instance();
+
+        $posts = $user ? $user->posts() : $Post;
 
         $posts = $posts->published()->in($category)->get();
 
         $categories = Category::latest()->get();
 
-        $M_Post = new Post;
-
-        return view(
-            'post.index',
-            compact('M_Post', 'posts', 'categories', 'user', 'category')
-        );
+        return view('post.index', compact('Post', 'posts', 'categories', 'user', 'category'));
     }
 
 
@@ -54,16 +50,14 @@ class PostController extends Controller
     public function create() {
         $categories = Category::latest()->get();
 
-        $M_Post = new Post;
-
-        return view('post.create', compact('M_Post', 'categories'));
+        return view('post.create', ['Post' => Post::instance(), 'categories' => $categories]);
     }
 
 
     public function store(PostRequest $request) {
         $category = Category::find( $request->input(['category']) );
 
-        $post = (new Post())->fill([
+        $post = Post::instance()->fill([
             'title' => $request->input('title'),
             'body' => $request->input('body'),
             'slug' => str_slug( $request->input('title') ),

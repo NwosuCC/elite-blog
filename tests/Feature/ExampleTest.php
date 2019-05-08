@@ -11,6 +11,7 @@ use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 
 use App\User;
 
+/** @group Post */
 class ExampleTest extends TestCase
 {
     use InteractsWithAuthentication;
@@ -121,7 +122,7 @@ class ExampleTest extends TestCase
 
         $response = $this->actingAs($user)->get('/posts/2/edit');
         $response->assertViewIs('post.edit');
-        $response->assertViewHasAll(['categories']);
+        $response->assertViewHasAll(['categories', 'post']);
         $response->assertSeeInOrder(['Title', 'Body']);
     }
 

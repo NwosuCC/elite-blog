@@ -70,7 +70,7 @@ class User extends Authenticatable
     }
 
     public function categories() {
-        return $this->hasMany(Category::class)->latest();
+        return $this->hasMany(Category::class);
     }
 
 
@@ -79,7 +79,7 @@ class User extends Authenticatable
     }
 
     public function posts() {
-        return $this->hasMany(Post::class)->latest();
+        return $this->hasMany(Post::class);
     }
 
 }

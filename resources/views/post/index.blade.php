@@ -12,7 +12,7 @@
                     </div>
                     <div class="ml-auto">
                       <small>
-                        <a class="nav-link p-0" href="{{ $M_Post->route->create }}">{{ __('Publish an Article') }}</a>
+                        <a class="nav-link p-0" href="{{ $Post->route->create }}">{{ __('Publish an Article') }}</a>
                       </small>
                     </div>
                   </div>
@@ -27,7 +27,7 @@
                                 <select id="category" onchange="window.location.href = this.value;" class="form-control-sm" name="category" style="font-size: 14px;" required title="">
                                     <option value=""> All Categories </option>
                                     @foreach($categories as $cat)
-                                        <option value="{{$M_Post->route->index_filters($user, $cat) }}" {{$category && $category->slug === $cat->slug ? 'selected' : ''}}>
+                                        <option value="{{$Post->route->index_filters($user, $cat) }}" {{$category && $category->slug === $cat->slug ? 'selected' : ''}}>
                                             {{ $cat->name }}
                                         </option>
                                     @endforeach

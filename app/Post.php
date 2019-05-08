@@ -8,6 +8,7 @@ use App\Presenters\PostUrlPresenter;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
+
 class Post extends Model
 {
     protected $fillable = [
@@ -66,7 +67,10 @@ class Post extends Model
             return Carbon::make( $published_at )->isPast();
         }
 
-        return $query->where('published_at', '<=', Carbon::now());
+//        return $query->where('published_at', '<=', Carbon::now())
+        return $query->where('published_at', '<=', Carbon::now())
+                     ->orderBy('published_at', 'desc')
+                     ->latest();
     }
 
 

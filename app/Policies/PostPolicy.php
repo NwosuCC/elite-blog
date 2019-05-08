@@ -12,7 +12,7 @@ class PostPolicy
 
     /* NOTE:
      * Register Policy in AuthServiceProvider $policies
-     *  'App\Post' => 'App\Policies\PostPolicy',
+     *  'App\PostTest' => 'App\Policies\PostPolicy',
      */
 
     protected static $admin_tasks = [

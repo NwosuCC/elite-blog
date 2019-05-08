@@ -26,6 +26,6 @@ class BroadcastNewPostNotification
      */
     public function handle(PostSaved $event)
     {
-        info('Post [id = "' . $event->post->id . '"] PostSaved $event handled in BroadcastNewPostNotification::class');
+        info('PostTest [id = "' . $event->post->id . '"] PostSaved $event handled in BroadcastNewPostNotification::class');
     }
 }

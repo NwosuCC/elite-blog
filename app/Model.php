@@ -17,8 +17,14 @@ class Model extends Eloquent
      *
      * @var array
      */
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at', 'published_at'];
 
+
+    /** @return static */
+    public static function instance()
+    {
+      return app()->make(static::class);
+    }
 
     public function getRouteAttribute() {
       return new ModelUrlPresenter($this);
