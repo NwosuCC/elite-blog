@@ -28,8 +28,12 @@ class PostObserver
         return ' titled "' . $post->title . '"';
     }
 
-    private function changes($post) {
+    private function changes(Post $post) {
         return 'Changes: ' . json_encode($post->getChanges());
+    }
+
+    private function dump(Post $post) {
+        return 'Archive: ' . json_encode($post->toArray());
     }
 
     private function message($action, $post) {
@@ -37,7 +41,7 @@ class PostObserver
             'created' => ['created new', $this->postTitle($post)],
             'updated' => ['updated', $this->changes($post)],
             'deleting' => ['attempted to delete', ''],
-            'deleted' => ['deleted', ''],
+            'deleted' => ['deleted', $this->dump($post)],
         ];
 
         return $descriptions[$action] ?? null;

@@ -74,7 +74,8 @@ class User extends Authenticatable
     }
 
 
-    public function publishPost(Category $category, Post $post){
+    public function publishPost(Category $category, Post $post)
+    {
         $this->posts()->save( $category->addPost($post) );
     }
 

@@ -28,10 +28,9 @@ class Category extends Model
         return $this->hasMany(Post::class)->latest();
     }
 
-    public function addPost(Post $post) {
-//        $post->category_id = $this->id;
-        $post->setAttribute('category_id', $this->getAttribute('id'));
-        return $post;
+    public function addPost(Post $post)
+    {
+      return $post->setAttribute('category_id', $this->{'id'});
     }
 
 

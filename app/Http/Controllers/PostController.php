@@ -64,7 +64,7 @@ class PostController extends Controller
             'published_at' => $request->input('publish_at') ?: Carbon::now(),
         ]);
 
-        auth()->user()->publishPost( $category, $post );
+      $request->user()->publishPost( $category, $post );
 
         set_flash('New article saved');
 
