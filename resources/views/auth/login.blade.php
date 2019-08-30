@@ -4,6 +4,15 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
+            {{-- Test Admin --}}
+            <div class="row mb-5 py-2 border border-dark border-left-0 border-right-0">
+                <div class="col-4 text-right">Test Admin</div>
+                <div class="col-8">
+                    <div>Username: {{ __('claudie9@aol.com') }}</div>
+                    <div>Password: {{ __('claudie9') }}</div>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
 
