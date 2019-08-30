@@ -20,9 +20,9 @@ class Role extends Model
      *
      * Custom Roles can then be created and assigned ranks 4, 5, 6, ... etc
      */
-    private const DEFAULT_RANKS = [ 1, 2 ];
+    const DEFAULT_RANKS = [ 1, 2 ];
 
-    private const SUPER_ADMIN = 1, ADMIN = 2;
+    const SUPER_ADMIN = 1, ADMIN = 2;
 
     /**
      * Rank numbers for Admin and SuperAdmin roles
